@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PeopleController extends Controller
+class SubjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,11 +14,11 @@ class PeopleController extends Controller
      */
     public function index()
     {
-        $people = DB::table('people')
+        $subjects = DB::table('subjects')
                     ->select('*')
                     ->get();
         
-        return $people;
+        return $subjects;
     }
 
     /**
@@ -40,9 +40,9 @@ class PeopleController extends Controller
      */
     public function show($id)
     {
-        $person = DB::select('select * from people where id = :id', ['id' => $id]);
+        $subject = DB::select('select * from subjects where id = :id', ['id' => $id]);
 
-        return $person;
+        return $subject;
     }
 
     /**

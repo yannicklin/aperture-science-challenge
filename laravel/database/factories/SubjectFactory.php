@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Person;
+use App\Models\Subject;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PersonFactory extends Factory
+class SubjectFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Person::class;
+    protected $model = Subject::class;
 
     /**
      * Define the model's default state.
@@ -23,8 +23,10 @@ class PersonFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'age' => $this->faker->randomDigitNotNull(),
-            'address' => $this->faker->address(),
+            'test_chamber' => $this->faker->numberBetween(1, 20),
+            'date_of_birth' => $this->faker->dateTimeThisCentury(),
+            'score' => $this->faker->numberBetween(0, 100),
+            'alive' => $this->faker->boolean()
         ];
     }
 }
