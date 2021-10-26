@@ -11,7 +11,7 @@ type Query {
     subject(id: ID @eq): Subject @find
 }
 
-type User {
+type User @guard {
     id: ID!
     name: String!
     email: String!
