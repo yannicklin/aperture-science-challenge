@@ -21,6 +21,7 @@ Build to list subject data and request all their associated testing data
 Senior:
 + above
 Allow subjects to login to the system, only allow them to see their own data.
+Implement a password reset
 
 
 UX Design Engineer (another branch?, totally different tech test):

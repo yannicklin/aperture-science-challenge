@@ -1,9 +1,35 @@
 import type { NextPage } from 'next'
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import axios from 'axios';
 
-const Home: NextPage = () => {
+export default function Home() {
+  const [ foo, loading ] = useState([]);
+
+  useEffect(() => function () {
+    console.log('blah');
+    axios.get('http://localhost/sanctum/csrf-cookie').then(response => {
+      console.log(response);
+      const login = axios({
+        method: "post",
+        url: 'http://localhost/login',
+        data: {
+          "email": "foo@foo.com",
+          "password": "bar"
+        },
+        withCredentials: true,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json"
+        }
+      }).then(response => {
+        console.log(response);
+      }).catch(error => console.log(error))
+    })
+  }, [foo]);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -14,7 +40,7 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Welcome to <a href="https://nextjs.org">Nexts.js!</a>
         </h1>
 
         <p className={styles.description}>
@@ -68,5 +94,3 @@ const Home: NextPage = () => {
     </div>
   )
 }
-
-export default Home

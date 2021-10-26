@@ -1,6 +1,6 @@
 FROM node:alpine as BUILD_IMAGE
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 COPY package.json yarn.lock ./
 
@@ -13,17 +13,14 @@ COPY . .
 RUN yarn build
 
 # remove dev dependencies
-RUN npm prune --production
+# RUN npm prune --production
 
 FROM node:alpine
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # copy from build image
-COPY --from=BUILD_IMAGE /app/package.json ./package.json
-COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
-COPY --from=BUILD_IMAGE /app/.next ./.next
-COPY --from=BUILD_IMAGE /app/public ./public
+COPY --from=BUILD_IMAGE /usr/src/app .
 
 EXPOSE 3000
-CMD ["yarn", "start"]
+CMD ["yarn", "dev"]
