@@ -11,7 +11,6 @@
 
 <body>
 
-<div>yo</div>
 <form method="POST" action="/login">
     @csrf
     <input id="username" name="username" type="text" />
