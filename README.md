@@ -33,5 +33,7 @@ Use dynamic details in login form
 Fix 419 response
 Fix login fail/validation
 Tests, to everything
-Interface
+Interface (inc page head)
 Logout function
+Seed decent data
+Readme + writeup
