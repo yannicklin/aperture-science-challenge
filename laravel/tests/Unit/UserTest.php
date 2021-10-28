@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use App\Models\Subject;
 
 class UserTest extends TestCase
 {
@@ -15,18 +16,10 @@ class UserTest extends TestCase
      */
     public function test_models_can_be_instantiated()
     {
-        $user = User::factory()->make();
-        // var_dump($user);
-        // $this->assertClassHasAttribute('name', User::class);
-        $this->assertTrue(true);
-    }
+        $user = User::factory()->make(['name' => 'Joe Bloggs']);
+        $subject = Subject::factory()->make(['name' => 'Joe Bloggs']);
 
-    // public function test_user_create()
-    // {
-    //     $user = User::factory(1)->create();
-    //     // var_dump($user);
-    //     $this->assertDatabaseHas('users', [
-    //         'email' => 'sally@example.com',
-    //     ]);
-    // }
+        $this->assertInstanceOf(Subject::class, $subject);
+        $this->assertInstanceOf(User::class, $user);
+    }
 }
