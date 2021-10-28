@@ -7,10 +7,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use App\Models\Subject;
 
-class UserTest extends TestCase
+class ModelTest extends TestCase
 {
     /**
-     * Create user class
+     * Create user and subject classes
      *
      * @return void
      */
