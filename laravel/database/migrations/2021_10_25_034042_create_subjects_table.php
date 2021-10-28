@@ -21,6 +21,7 @@ class CreateSubjectsTable extends Migration
             $table->integer('score');
             $table->boolean('alive');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

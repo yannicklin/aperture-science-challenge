@@ -4,9 +4,11 @@ namespace Database\Factories;
 
 use App\Models\Subject;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SubjectFactory extends Factory
 {
+    use SoftDeletes;
     /**
      * The name of the factory's corresponding model.
      *

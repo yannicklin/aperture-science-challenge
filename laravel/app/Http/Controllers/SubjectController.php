@@ -14,9 +14,7 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = DB::table('subjects')
-                    ->select('*')
-                    ->get();
+        $subjects = Subject::all();
         
         return $subjects;
     }
@@ -40,8 +38,7 @@ class SubjectController extends Controller
      */
     public function show($id)
     {
-        $subject = DB::select('select * from subjects where id = :id', ['id' => $id]);
-
+        $subject = Subject::where('id', $id);
         return $subject;
     }
 
@@ -64,7 +61,8 @@ class SubjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+    {   
+        $subject = Subject::where('id', $id)->delete();
+        return $subject;
     }
 }
