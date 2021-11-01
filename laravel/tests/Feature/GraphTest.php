@@ -2,8 +2,9 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\WithFaker;
 use Nuwave\Lighthouse\Testing\ClearsSchemaCache;
+use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 use App\Models\Subject;
 
@@ -68,5 +69,33 @@ class GraphTest extends TestCase
 
         $message = array_shift(json_decode($response->json)->errors)->message;
         $this->assertEquals($message, "Unauthenticated.");
+    }
+
+    /**
+     * Try to query Users as authenticated user, be successful.
+     *
+     * @return void
+     */
+
+    public function testQueryUsersAuthenticated(): void
+    {
+        $subject = User::factory()->make();
+
+        Sanctum::actingAs(
+            $subject,
+        );
+
+        $response = $this->graphQL(/** @lang GraphQL */ '
+            {
+                users {
+                    data {
+                        name
+                    }
+                }
+            }
+        ')->decodeResponseJson();
+
+        $users = json_decode($response->json)->data->users->data;
+        $this->assertCount(10, $users);
     }
 }
