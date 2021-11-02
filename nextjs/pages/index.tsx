@@ -1,6 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
-import Cookies from 'cookies';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import styles from '../styles/Home.module.css'
 import axios from 'axios';
@@ -12,6 +11,7 @@ Home.getInitialProps = ({ req, res }: any) => {
 }
 
 export default function Home(props: any) {
+  const [ message, setFormMessage ] = useState('');
   const router = useRouter();
 
   const login = async (event: any) => {
@@ -23,7 +23,7 @@ export default function Home(props: any) {
           withCredentials: true
         }
       ).then(async () => {
-        return await axios({
+        await axios({
           method: "post",
           url: `${process.env.NEXT_PUBLIC_BASE_API}/login`,
           data: {
@@ -35,24 +35,43 @@ export default function Home(props: any) {
             "X-Requested-With": "XMLHttpRequest",
             "Accept": "application/json"
           }
+        }).then(res => router.push('/subjects'))
+        .catch(e => {
+          if (e.response?.data?.message) {
+            setFormMessage(e.response?.data?.message);
+          } else {
+            setFormMessage('An error occurred, please try again later.')
+          }
         })
       });
-      router.push('/subjects')
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.log(err);
     }
   }
 
   return (
     <div className={styles.container}>
-      <React.Fragment>
+      <div className={styles.main}>
         <h1>Please login</h1>
-        <form id="login" onSubmit={login}>
-          <input id="email" type="email" name="email" />
-          <input id="password" type="password" name="password" />
-          <input type="submit"/>
-        </form>
-      </React.Fragment>
+        <section className={styles.content}>
+          <form id="login" onSubmit={login}>
+            <div className={styles.inputGroup}>
+              <label htmlFor="email">Email</label>
+              <input id="email" type="email" name="email" />
+            </div>
+            <div className={styles.inputGroup}>
+              <label htmlFor="password">Password</label>
+              <input id="password" type="password" name="password" />
+            </div>
+            {message && (
+              <p>{message}</p>
+            )}
+            <div className={styles.inputGroup}>
+              <input type="submit"/>
+            </div>
+          </form>
+        </section>
+      </div>
     </div>
   )
 }

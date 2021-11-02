@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import Cookies from 'cookies';
 import { useCookies } from "react-cookie"
 import styles from '../styles/Home.module.css'
 import axios from 'axios';
@@ -79,39 +78,66 @@ export default function Subjects(props: any) {
 
   return (
     <div className={styles.container}>
-      {authenticated && <h1>Welcome!</h1>}
-      {subjects && subjects.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <td>ID</td>
-              <td>Name</td>
-              <td>Created</td>
-              <td>DOB</td>
-              <td>Alive</td>
-              <td>Score</td>
-              <td>Test Chamber</td>
-            </tr>
-          </thead>
-          <tbody>
-            {subjects.map(subject => (
-              <tr key={subject.id}>
-                <td>{subject.id}</td>
-                <td>{subject.name}</td>
-                <td>{subject.created_at}</td>
-                <td>{subject.date_of_birth}</td>
-                <td>{subject.alive}</td>
-                <td>{subject.score}</td>
-                <td>{subject.test_chamber}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      {!subjects && (
-        <p>loading ...</p>
-      )}
-      {authenticated && <button onClick={logout}>Log out</button>}
+      <div className={styles.main}>
+        {authenticated && <h1>Testing Subjects</h1>}
+        <section className={styles.content}>
+          {subjects && subjects.length > 0 && (
+            <table>
+              <thead>
+                <tr>
+                  <td>ID</td>
+                  <td>Name</td>
+                  <td>DOB</td>
+                  <td>Alive</td>
+                  <td>Score</td>
+                  <td>Test Chamber</td>
+                </tr>
+              </thead>
+              <tbody>
+                {subjects.map(subject => (
+                  <tr key={subject.id}>
+                    <td>{subject.id}</td>
+                    <td>{subject.name}</td>
+                    <td>{subject.date_of_birth}</td>
+                    <td>{subject.alive ? 'Y' : 'N'}</td>
+                    <td>{subject.score}</td>
+                    <td>{subject.test_chamber}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+          {!subjects && (
+            <div className={styles.skeleton}>
+              <table>
+              <thead>
+                <tr>
+                  <td>ID</td>
+                  <td>Name</td>
+                  <td>DOB</td>
+                  <td>Alive</td>
+                  <td>Score</td>
+                  <td>Test Chamber</td>
+                </tr>
+              </thead>
+              <tbody>
+                {[1,2,3,4,5,6,7,8,9,10].map(subject => (
+                  <tr key={subject}>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            </div>
+          )}
+          {authenticated && <button onClick={logout}>Log out</button>}
+        </section>
+      </div>
     </div>
   )
 }
