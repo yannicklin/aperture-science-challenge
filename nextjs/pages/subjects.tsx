@@ -44,6 +44,14 @@ export default function Subjects(props: any) {
     }
   }
 
+  const formatDate = (dateStr: string | undefined) => {
+    if (!dateStr) {
+      return '???'
+    }
+    const date = new Date(dateStr);
+    return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+  }
+
   useEffect(() => {
     if (authenticated) {
       axios({
@@ -98,7 +106,7 @@ export default function Subjects(props: any) {
                   <tr key={subject.id}>
                     <td>{subject.id}</td>
                     <td>{subject.name}</td>
-                    <td>{subject.date_of_birth}</td>
+                    <td>{formatDate(subject.date_of_birth)}</td>
                     <td>{subject.alive ? 'Y' : 'N'}</td>
                     <td>{subject.score}</td>
                     <td>{subject.test_chamber}</td>
