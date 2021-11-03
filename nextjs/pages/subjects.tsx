@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
+import { NextPage, NextPageContext  } from 'next'
 import { useCookies } from "react-cookie"
 import styles from '../styles/Home.module.css'
 import axios from 'axios';
@@ -17,15 +18,16 @@ interface Subject {
   updated_at?: string
 }
 
-Subjects.getInitialProps = ({ req, res }: any) => {
+Subjects.getInitialProps = ({ req, res }: NextPageContext) => {
   const cookies = parseCookies(req);
   return { XSRF_TOKEN: cookies["XSRF-TOKEN"] };
 }
 
-export default function Subjects(props: any) {
+export default function Subjects(props: NextPage & {XSRF_TOKEN: string}) {
   const router = useRouter();
   const [ authenticated, setAuth ] = useState<Boolean>(!!props.XSRF_TOKEN);
   const [ subjects, setSubjects ] = useState<Array<Subject>>();
+  const [ message, setErrorMessage ] = useState<string>('');
   const [cookie, setCookie, removeCookie] = useCookies(["XSRF-TOKEN"])
 
   const logout = async () => {
@@ -54,11 +56,9 @@ export default function Subjects(props: any) {
 
   useEffect(() => {
     if (authenticated) {
-      axios({
-        url: `${process.env.NEXT_PUBLIC_BASE_API}/graphql`,
-        method: 'post',
-        withCredentials: true,
-        data: {
+      axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_API}/graphql`,
+        {
           query: `
               query {
                 subjects {
@@ -72,25 +72,42 @@ export default function Subjects(props: any) {
                 }
               }
             `
-        }
-      }).then(response => {
-        const { subjects } = response.data?.data
+        },
+        { withCredentials: true }
+      ).then(response => {
+        console.log(response.data);
+        const { subjects = [] } = response.data?.data;
         if (subjects && subjects.length > 0) {
-          setSubjects(subjects as Subject[]);
+          return setSubjects(subjects as Subject[]);
+        }
+      }).catch((e) => {
+        console.log(e);
+        if (e.response?.data?.message) {
+          if (e.response?.data?.message === "CSRF token mismatch.") {
+            return setErrorMessage("Your session has expired, please log in again.");
+          } else {
+            return setErrorMessage(e.response?.data?.message);
+          }
+        } else {
+          return setErrorMessage('An error occurred, please try again later.')
         }
       })
     } else {
       router.push('/');
+      return;
     }
   }, [authenticated]);
 
   return (
     <div className={styles.container}>
       <div className={styles.main}>
-        {authenticated && <h1>Testing Subjects</h1>}
+        <h1>Testing Subjects</h1>
         <section className={styles.content}>
+          {message && (
+            <p data-testid="error-msg">{message}</p>
+          )}
           {subjects && subjects.length > 0 && (
-            <table>
+            <table data-testid="subjects-table">
               <thead>
                 <tr>
                   <td>ID</td>
@@ -115,8 +132,8 @@ export default function Subjects(props: any) {
               </tbody>
             </table>
           )}
-          {!subjects && (
-            <div className={styles.skeleton}>
+          {!subjects && !message && (
+            <div className={styles.skeleton} data-testid="skeleton">
               <table>
               <thead>
                 <tr>
@@ -129,7 +146,7 @@ export default function Subjects(props: any) {
                 </tr>
               </thead>
               <tbody>
-                {[1,2,3,4,5,6,7,8,9,10].map(subject => (
+                {Array.from(Array(10).keys()).map(subject => (
                   <tr key={subject}>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>

@@ -1,16 +1,17 @@
 
 import React, { useState } from 'react';
+import { NextPage, NextPageContext } from 'next'
 import { useRouter } from 'next/router'
 import styles from '../styles/Home.module.css'
 import axios from 'axios';
 import { parseCookies } from "../helpers/"
 
-Home.getInitialProps = ({ req, res }: any) => {
+Home.getInitialProps = ({ req, res }: NextPageContext) => {
   const cookies = parseCookies(req);
   return { XSRF_TOKEN: cookies["XSRF-TOKEN"] };
 }
 
-export default function Home(props: any) {
+export default function Home(props: NextPage & {XSRF_TOKEN: string}) {
   const [ message, setFormMessage ] = useState('');
   const router = useRouter();
 
@@ -54,7 +55,7 @@ export default function Home(props: any) {
       <div className={styles.main}>
         <h1>Please login</h1>
         <section className={styles.content}>
-          <form id="login" onSubmit={login}>
+          <form id="login" onSubmit={login} data-testid="login-form">
             <div className={styles.inputGroup}>
               <label htmlFor="email">Email</label>
               <input id="email" type="email" name="email" />

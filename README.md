@@ -4,6 +4,7 @@
 2. ``` docker exec laravel php artisan migrate ```
 3. ``` docker exec laravel php artisan db:seed --class=SubjectSeeder ```
 4. ``` docker exec laravel php artisan test ```
+5. ``` docker exec nextjs yarn test ```
 
 
 ## Testing 
@@ -36,8 +37,8 @@ Build a paginated and filterable list in the front end.
 
 Things to add:
 Fix 419 response
-Fix login fail/validation
-Tests, to everything
-Interface (inc page head)
+Front end tests
+    - unit
+    - cypress
 Seed decent data
 Readme + writeup
