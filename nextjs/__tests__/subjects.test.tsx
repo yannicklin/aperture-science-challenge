@@ -9,7 +9,9 @@ import MockAdapter from 'axios-mock-adapter';
 import * as nextRouter from 'next/router';
 import SubjectsMock, { subjectsResponse } from '../__mocks__/subjectsMock'
 
+// @ts-ignore: misuse of typecast for tests only
 nextRouter.useRouter = jest.fn();
+// @ts-ignore: misuse of typecast for tests only
 nextRouter.useRouter.mockImplementation(() => ({ 
   route: '/',
   push: jest.fn() 

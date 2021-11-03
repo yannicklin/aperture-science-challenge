@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { NextPage, NextPageContext  } from 'next'
 import { useCookies } from "react-cookie"
-import styles from '../styles/Home.module.css'
+import styles from '../styles/App.module.css'
 import axios from 'axios';
 import { parseCookies } from "../helpers/"
 import { useRouter } from 'next/router'
+import Layout from "../components/layout"
 
 interface Subject {
   id: number,
@@ -99,70 +100,68 @@ export default function Subjects(props: NextPage & {XSRF_TOKEN: string}) {
   }, [authenticated]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.main}>
-        <h1>Testing Subjects</h1>
-        <section className={styles.content}>
-          {message && (
-            <p data-testid="error-msg">{message}</p>
-          )}
-          {subjects && subjects.length > 0 && (
-            <table data-testid="subjects-table">
-              <thead>
-                <tr>
-                  <td>ID</td>
-                  <td>Name</td>
-                  <td>DOB</td>
-                  <td>Alive</td>
-                  <td>Score</td>
-                  <td>Test Chamber</td>
+    <Layout>
+      <h1>Testing Subjects</h1>
+      <section className={styles.content}>
+        {message && (
+          <p data-testid="error-msg">{message}</p>
+        )}
+        {subjects && subjects.length > 0 && (
+          <table data-testid="subjects-table">
+            <thead>
+              <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>DOB</td>
+                <td>Alive</td>
+                <td>Score</td>
+                <td>Test Chamber</td>
+              </tr>
+            </thead>
+            <tbody>
+              {subjects.map(subject => (
+                <tr key={subject.id}>
+                  <td>{subject.id}</td>
+                  <td>{subject.name}</td>
+                  <td>{formatDate(subject.date_of_birth)}</td>
+                  <td>{subject.alive ? 'Y' : 'N'}</td>
+                  <td>{subject.score}</td>
+                  <td>{subject.test_chamber}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {subjects.map(subject => (
-                  <tr key={subject.id}>
-                    <td>{subject.id}</td>
-                    <td>{subject.name}</td>
-                    <td>{formatDate(subject.date_of_birth)}</td>
-                    <td>{subject.alive ? 'Y' : 'N'}</td>
-                    <td>{subject.score}</td>
-                    <td>{subject.test_chamber}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-          {!subjects && !message && (
-            <div className={styles.skeleton} data-testid="skeleton">
-              <table>
-              <thead>
-                <tr>
-                  <td>ID</td>
-                  <td>Name</td>
-                  <td>DOB</td>
-                  <td>Alive</td>
-                  <td>Score</td>
-                  <td>Test Chamber</td>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {!subjects && !message && (
+          <div className={styles.skeleton} data-testid="skeleton">
+            <table>
+            <thead>
+              <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>DOB</td>
+                <td>Alive</td>
+                <td>Score</td>
+                <td>Test Chamber</td>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from(Array(10).keys()).map(subject => (
+                <tr key={subject}>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
                 </tr>
-              </thead>
-              <tbody>
-                {Array.from(Array(10).keys()).map(subject => (
-                  <tr key={subject}>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            </div>
-          )}
-          {authenticated && <button onClick={logout}>Log out</button>}
-        </section>
-      </div>
-    </div>
+              ))}
+            </tbody>
+          </table>
+          </div>
+        )}
+        {authenticated && <button onClick={logout}>Log out</button>}
+      </section>
+    </Layout>
   )
 }

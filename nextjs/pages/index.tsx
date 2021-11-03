@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { NextPage, NextPageContext } from 'next'
 import { useRouter } from 'next/router'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/App.module.css'
 import axios from 'axios';
 import { parseCookies } from "../helpers/"
+import Layout from "../components/layout"
 
 Home.getInitialProps = ({ req, res }: NextPageContext) => {
   const cookies = parseCookies(req);
@@ -51,28 +52,26 @@ export default function Home(props: NextPage & {XSRF_TOKEN: string}) {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.main}>
-        <h1>Please login</h1>
-        <section className={styles.content}>
-          <form id="login" onSubmit={login} data-testid="login-form">
-            <div className={styles.inputGroup}>
-              <label htmlFor="email">Email</label>
-              <input id="email" type="email" name="email" />
-            </div>
-            <div className={styles.inputGroup}>
-              <label htmlFor="password">Password</label>
-              <input id="password" type="password" name="password" />
-            </div>
-            {message && (
-              <p>{message}</p>
-            )}
-            <div className={styles.inputGroup}>
-              <input type="submit"/>
-            </div>
-          </form>
-        </section>
-      </div>
-    </div>
+    <Layout>
+      <h1>Please login</h1>
+      <section className={styles.content}>
+        <form id="login" onSubmit={login} data-testid="login-form">
+          <div className={styles.inputGroup}>
+            <label htmlFor="email">Email</label>
+            <input id="email" type="email" name="email" />
+          </div>
+          <div className={styles.inputGroup}>
+            <label htmlFor="password">Password</label>
+            <input id="password" type="password" name="password" />
+          </div>
+          {message && (
+            <p>{message}</p>
+          )}
+          <div className={styles.inputGroup}>
+            <input type="submit"/>
+          </div>
+        </form>
+      </section>
+    </Layout>
   )
 }
