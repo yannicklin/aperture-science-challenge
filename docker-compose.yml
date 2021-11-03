@@ -10,7 +10,6 @@ services:
       POSTGRES_DB: laravel
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
-      # - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
     ports:
       - '5432:5432'
     networks:
@@ -25,7 +24,7 @@ services:
       - "443:443"
     volumes:
       - ./laravel:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./config/nginx/conf.d/:/etc/nginx/conf.d/
     depends_on:
       - laravel
     networks:
@@ -36,12 +35,10 @@ services:
     tty: true
     build:
       context: ./laravel
-    # ports:
-    #     - '8000:80'
     working_dir: /var/www
     volumes:
       - ./laravel:/var/www
-      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     depends_on:
       - database
     networks:
@@ -54,6 +51,18 @@ services:
       - "3000:3000"
     volumes:
         - ./nextjs:/usr/src/app
+    networks:
+      - frontend
+
+  cypress:
+    image: "cypress/included:4.1.0"
+    container_name: cypress
+    command: "--browser chrome"
+    volumes:
+      - ./cypress:/cypress
+      - ./config/cypress/cypress.json:/cypress.json
+    depends_on:
+      - nextjs
     networks:
       - frontend
 
