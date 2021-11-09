@@ -47,6 +47,7 @@ export default function Home(props: NextPage & {XSRF_TOKEN: string}) {
         })
       });
     } catch (err) {
+      setFormMessage('An error occurred, please try again later.')
       console.log(err);
     }
   }
@@ -65,10 +66,10 @@ export default function Home(props: NextPage & {XSRF_TOKEN: string}) {
             <input id="password" type="password" name="password" />
           </div>
           {message && (
-            <p>{message}</p>
+            <p data-testid="error-msg">{message}</p>
           )}
           <div className={styles.inputGroup}>
-            <input type="submit"/>
+            <input id="submit" type="submit"/>
           </div>
         </form>
       </section>

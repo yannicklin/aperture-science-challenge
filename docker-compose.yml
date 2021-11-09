@@ -55,9 +55,10 @@ services:
       - frontend
 
   cypress:
-    image: "cypress/included:4.1.0"
+    image: "cypress/included:6.0.0"
     container_name: cypress
     command: "--browser chrome"
+    restart: "no"
     volumes:
       - ./cypress:/cypress
       - ./config/cypress/cypress.json:/cypress.json
