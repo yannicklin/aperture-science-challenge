@@ -1,69 +1,93 @@
 let LOCAL_STORAGE_MEMORY = {}
 
 describe('Aperture Science Enhancement Center Cypress Tests', () => {
+  Cypress.Cookies.debug(true);
   Cypress.Cookies.defaults({
     preserve: (cookie) => {
       return /^(laravel|XSRF).+/.test(cookie.name)
     }
   })
 
-  // beforeEach(() => {
-  //   cy.visit('http://nextjs:3000')
-  // })
-
-  // it('finds the home page', function () {
-  //   cy.visit('http://nextjs:3000')
-  //   cy.get('h1');
-  // })
-
-  // it('can get validation errors with failed CSRF request', function () {
-  //   cy.get('#submit').click();
-  //   cy.get('[data-testid="error-msg"]').contains('An error occurred, please try again later.');
-  // })
-
-  // it('can set cookies', function () {
-  //   cy.setCookie('XSRF-FOO', 'abc');
-  //   cy.getCookie('XSRF-FOO').should('exist');
-  // });
-
-  it('can get a CSRF token and have it set in cookies', function () {
-    cy.visit('http://nextjs:3000')
-    cy.request('/sanctum/csrf-cookie').then(response => {
-      expect(response.status).to.eq(204);
-      cy.log('response.headers["set-cookie"]["0"]:', response.headers["set-cookie"]["0"]);
-      // cy.getCookie refuses to work, manually pull cookie and append it to X-XSRF-TOKEN header
-      const xsrf = response.headers["set-cookie"]["0"].split(';')[0].split("=")[1];
-      cy.request({
-        method: 'POST',
-        url: '/login',
-        body: {
-          "email":"foo@foo.com",
-          "password":"bar"
-        },
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          "X-XSRF-TOKEN": decodeURIComponent(xsrf),
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        }
-      }).then(response => {
-        expect(response.status).to.eq(200);
-      });
-    });
+  it('finds the home page', function () {
+    cy.visit('http://host.docker.internal:3000')
+    cy.get('h1');
   })
+  
+  // it('can log in and see a list of subjects', function () {
+  //   let cookies = null
+  //   let token = ''
 
-  // it('can log in', function () {
-  //   cy.visit('http://nextjs:3000')
+  //   cy.visit('http://host.docker.internal:3000')
   //   cy.get('#email').type(Cypress.env('email'));
   //   cy.get('#password').type(Cypress.env('password'));
-  //   cy.get('#submit').click();
-  //   // cy.getCookie('XSRF-TOKEN').should('exist');
-  //   cy.wait(2000);
-  //   cy.intercept('POST', 'http://webserver/login', {
-  //     statusCode: 200,
-  //   });
-  //   cy.location('pathname').should('eq', '/subjects').debug();
-  //   cy.get('h3');
+
+  //   cy.intercept('http://webserver/sanctum/csrf-cookie', (req) => {
+  //     req.on('response', (res) => {
+  //       cookies = res.headers["set-cookie"]
+  //     })
+  //   }).as('token')
+
+  //   cy.intercept('POST', 'http://webserver/login', (req) => {
+  //     for (const cookie of cookies) {
+  //       const name = cookie.split(';')[0].split("=")[0]
+  //       const val = cookie.split(';')[0].split("=")[1]
+
+  //       if (name === 'XSRF-TOKEN') {
+  //         token = decodeURIComponent(val)
+  //         req.headers['X-XSRF-TOKEN'] = token
+  //       }
+  //     }
+  //     req.headers['Cookie'] = cookies.join(';')
+
+  //     req.on('response', (res) => {
+  //       cookies = res.headers["set-cookie"]
+  //     })
+  //   }).as('login')
+
+  //   cy.get('#submit').click()
+
+  //   cy.wait('@token')
+  //   cy.wait('@login')
+  //     .its('request.headers')
+  //     .should('have.property', 'X-XSRF-TOKEN')
+  //     .then(() => {
+  //       for (const cookie of cookies) {
+  //         const name = cookie.split(';')[0].split("=")[0]
+  //         const val = cookie.split(';')[0].split("=")[1]
+  //         cy.setCookie(name, val)
+  //       }
+  //     })
+
+  //   cy.intercept('POST', 'http://webserver/graphql', (req) => {
+  //     req.headers['Cookie'] = cookies.join(';')
+  //   }).as('graphql')
+
+  //   cy.location('pathname').should('eq', '/subjects')
+  //   cy.get('h1').contains('Testing Subjects');
+  //   cy.get('div[data-testid="skeleton"]');
+
+  //   cy.wait('@graphql')
+  //   cy.get('table[data-testid="subjects-table"]');
   // })
-  
+
+  it('can log in and see a list of subjects', function () {
+    cy.visit('http://host.docker.internal:3000')
+    cy.get('#email').type(Cypress.env('email'));
+    cy.get('#password').type(Cypress.env('password'));
+
+    cy.get('#submit').click()
+
+    cy.location('pathname').should('eq', '/subjects')
+    cy.get('h1').contains('Testing Subjects');
+
+    cy.intercept('POST', 'http://host.docker.internal/graphql').as('graphql')
+
+    cy.location('pathname').should('eq', '/subjects')
+    cy.get('h1').contains('Testing Subjects');
+    cy.get('div[data-testid="skeleton"]');
+
+    cy.wait('@graphql')
+    cy.get('table[data-testid="subjects-table"]');
+  });
+
 })
