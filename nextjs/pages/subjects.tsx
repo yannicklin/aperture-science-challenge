@@ -76,7 +76,6 @@ export default function Subjects(props: NextPage & {XSRF_TOKEN: string}) {
         },
         { withCredentials: true }
       ).then(response => {
-        console.log(response.data);
         const { subjects = [] } = response.data?.data;
         if (subjects && subjects.length > 0) {
           return setSubjects(subjects as Subject[]);

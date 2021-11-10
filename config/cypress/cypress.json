@@ -2,5 +2,9 @@
     "pluginsFile": false,
     "supportFile": false,
     "video": false,
-    "baseUrl": "http://webserver"
+    "baseUrl": "http://webserver",
+    "env": {
+        "email": "foo@foo.com",
+        "password": "bar"
+    }
 }

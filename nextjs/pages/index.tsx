@@ -21,9 +21,7 @@ export default function Home(props: NextPage & {XSRF_TOKEN: string}) {
     try {
       await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_API}/sanctum/csrf-cookie`,
-        {
-          withCredentials: true
-        }
+        { withCredentials: true }
       ).then(async () => {
         await axios({
           method: "post",
@@ -35,7 +33,10 @@ export default function Home(props: NextPage & {XSRF_TOKEN: string}) {
           withCredentials: true,
           headers: {
             "X-Requested-With": "XMLHttpRequest",
-            "Accept": "application/json"
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            xsrfCookieName: 'XSRF-TOKEN',
+            xsrfHeaderName: 'X-XSRF-TOKEN',
           }
         }).then(res => router.push('/subjects'))
         .catch(e => {
