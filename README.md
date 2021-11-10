@@ -1,6 +1,7 @@
 # aperture-science-challenge
 1. ``` docker-compose up -d --build ```
 2. ``` docker exec laravel php artisan migrate ```
+3. ``` docker exec laravel php artisan db:seed --class=DatabaseSeeder ```
 3. ``` docker exec laravel php artisan db:seed --class=SubjectSeeder ```
 4. ``` docker exec laravel php artisan test ```
 5. ``` docker exec nextjs yarn test ```
