@@ -2,7 +2,7 @@
     "pluginsFile": false,
     "supportFile": false,
     "video": false,
-    "baseUrl": "http://webserver",
+    "baseUrl": "http://host.docker.internal",
     "env": {
         "email": "foo@foo.com",
         "password": "bar"
