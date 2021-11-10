@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres
+    container_name: database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: laravel
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - backend
+
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./laravel:/var/www
+      - ./config/nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - laravel
+    networks:
+      - backend
+
+  laravel:
+    container_name: laravel
+    tty: true
+    build:
+      context: ./laravel
+    working_dir: /var/www
+    volumes:
+      - ./laravel:/var/www
+      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    depends_on:
+      - database
+    networks:
+      - backend
+
+  nextjs:
+    build: ./nextjs
+    container_name: nextjs
+    ports:
+      - "3000:3000"
+    volumes:
+        - ./nextjs:/usr/src/app
+    networks:
+      - frontend
+
+  cypress:
+    image: "cypress/included:8.5.0"
+    container_name: cypress
+    command: "--browser chrome"
+    restart: "no"
+    volumes:
+      - ./cypress:/cypress
+      - ./config/cypress/cypress.json:/cypress.json
+    depends_on:
+      - nextjs
+    networks:
+      - backend
+      - frontend
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
