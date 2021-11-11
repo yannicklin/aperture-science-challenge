@@ -1,5 +1,7 @@
 # Software Engineer Candidate technical challenge
 
+As part of the recruitment process at intelliHR, we ask that complete this code challenge.  We will review your submission and then conduct a code review in a formal interview setting.
+
 In this repository you will find a simple application that produces a React UI which communicates via GraphQL to a Laravel service and Postgres database.  The application will serve two pages, a login page and a subjects list.  The application stack also includes unit and e2e tests.
 
 For this challenge, you will require docker and docker-compose available in your working environment.  This application also makes use of the docker-provided internal hostname.
@@ -8,7 +10,7 @@ For this challenge, you will require docker and docker-compose available in your
 
 ## Launching development environment
 
-![Application infrastructure](./infrastructure.png)
+![Application infrastructure](./infrastructure.jpg)
 
 Fork this repository and clone it into your working environment of choice.
 
@@ -24,6 +26,14 @@ From the nextjs directory, run:
 Finally, launch the application with:
 &nbsp;&nbsp;&nbsp;6. ``` docker-compose up ```
 
+You may now find the nextjs application served at localhost:3000 / host.docker.internal:3000.  You may also access the laravel application at port 80 (though this will just return a Hello World).
+
+The seeding steps above will create the following user:
+**Email:** GLaDOS@aperture.com 
+**Password:** ISawDeer
+
+![Login page](./login.png)
+
 ### Testing
 You will notice a cypress container deploying and executing e2e tests in the step above.  You can re-run that process by
 - ``` docker-compose up cypress ```
@@ -31,6 +41,8 @@ You will notice a cypress container deploying and executing e2e tests in the ste
 There are also unit tests available:
 - ``` docker exec laravel php artisan test ```
 - ``` docker exec nextjs yarn test ```
+
+Once you have the application stack running, you're ready to take on the challenges below!
 
 ---
 
@@ -42,31 +54,31 @@ There are also unit tests available:
 
 ## Software Engineer
 
-After
+Please complete the following user stories relative to the role you are applying for.  You may optionally complete user stories from other role levels.
 
-Graduate:
-Admin can login to front end and see a list of subjects (expect candidate to perform a graphQL request and output a list)
+**Graduate Software Engineer:**
+1. As an un-authenticated user, I should *not* be able to request a subject list from the API.
+2. As an authenticated user, I want to be able to sort testing subjects by age and testing chamber from within the interface.
+3. As an authenticated user, I want to be able to sort testing subjects by age and testing chamber in my API requests.
 
-SEI: 
-+ above
-Add a new data model related to subjects - testing data
-Institute ordering for subjects
+**Software Engineer I:** 
+1. As an authenticated user, I want to be able to create testing subject records.
+2. As an authenticated user, I want to be able to edit testing subject records.
 
-SEII:
-+ above
-Build to list subject data and request all their associated testing data
-Request subject list on the server side
-Implement a subject update method
+**Software Engineer II:**
+1. As an authenticated user, I want to be able to create testing subject records.
+2. As an authenticated user, I want to be able to edit testing subject records.
+3. As an authenticated user, I want to be able to paginate through subject records in the interface.
 
-Senior:
-+ above
-Allow subjects to login to the system, only allow them to see their own data.
-Implement a password reset
+**Senior Software Engineer:**
+1. As an authenticated user, I want to be able to create testing subject records.
+2. As an authenticated user, I want to be able to edit testing subject records.
+3. As a testing subject, I want to be able to log into the system, but I should only be able to see/edit my own subject data.
+4. As a testing subject, I want to be able to reset my password.
 
 
-UX Design Engineer (another branch?, totally different tech test?):
-Build a paginated and filterable list in the front end.
+## Submissions
 
-Things to add:
-Seed decent data
-Readme + writeup
+Please submit your response as a link to a forked repo (we will share accounts to invite if you wish to keep it private).
+
+*Note:* Testing and documentation are vital for software professionals, please keep that in mind when finishing your submission.
