@@ -1,31 +1,33 @@
 
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { NextPage, NextPageContext } from 'next'
 import { useRouter } from 'next/router'
 import styles from '../styles/App.module.css'
 import axios from 'axios';
-import { parseCookies } from "../helpers/"
+import { parseCookies, resolveApiHost } from "../helpers/"
 import Layout from "../components/layout"
 
 Home.getInitialProps = ({ req, res }: NextPageContext) => {
   const cookies = parseCookies(req);
-  return { XSRF_TOKEN: cookies["XSRF-TOKEN"] };
+  const { protocol, hostname } = resolveApiHost(req);
+  return { XSRF_TOKEN: cookies["XSRF-TOKEN"], hostname, protocol };
 }
 
-export default function Home(props: NextPage & {XSRF_TOKEN: string}) {
+export default function Home(props: NextPage & {XSRF_TOKEN: string, hostname: string, protocol: string}) {
   const [ message, setFormMessage ] = useState('');
   const router = useRouter();
+  const api = `${props.protocol}//${props.hostname}`;
 
   const login = async (event: any) => {
     event.preventDefault()
     try {
       await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_API}/sanctum/csrf-cookie`,
+        `${api}/sanctum/csrf-cookie`,
         { withCredentials: true }
       ).then(async () => {
         await axios({
           method: "post",
-          url: `${process.env.NEXT_PUBLIC_BASE_API}/login`,
+          url: `${api}/login`,
           data: {
             "email": event.target.email.value,
             "password": event.target.password.value

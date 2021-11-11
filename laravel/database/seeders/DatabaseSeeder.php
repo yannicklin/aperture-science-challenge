@@ -16,13 +16,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // User::factory(5)->create();
         // test user
         DB::table('users')->insert([
-            'name' => 'Joe Bloggs',
-            'email' => 'foo@foo.com',
+            'name' => 'GLaDOS',
+            'email' => 'GLaDOS@aperture.com',
             'email_verified_at' => now(),
-            'password' => bcrypt('bar'),
+            'password' => bcrypt('ISawDeer'),
             'remember_token' => Str::random(10),
         ]);
     }

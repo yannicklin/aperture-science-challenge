@@ -4,7 +4,7 @@ import { NextPage, NextPageContext  } from 'next'
 import { useCookies } from "react-cookie"
 import styles from '../styles/App.module.css'
 import axios from 'axios';
-import { parseCookies } from "../helpers/"
+import { parseCookies, resolveApiHost } from "../helpers/"
 import { useRouter } from 'next/router'
 import Layout from "../components/layout"
 
@@ -21,21 +21,23 @@ interface Subject {
 
 Subjects.getInitialProps = ({ req, res }: NextPageContext) => {
   const cookies = parseCookies(req);
-  return { XSRF_TOKEN: cookies["XSRF-TOKEN"] };
+  const { protocol, hostname } = resolveApiHost(req);
+  return { XSRF_TOKEN: cookies["XSRF-TOKEN"], hostname, protocol };
 }
 
-export default function Subjects(props: NextPage & {XSRF_TOKEN: string}) {
+export default function Subjects(props: NextPage & {XSRF_TOKEN: string, hostname: string, protocol:string}) {
   const router = useRouter();
   const [ authenticated, setAuth ] = useState<Boolean>(!!props.XSRF_TOKEN);
   const [ subjects, setSubjects ] = useState<Array<Subject>>();
   const [ message, setErrorMessage ] = useState<string>('');
   const [cookie, setCookie, removeCookie] = useCookies(["XSRF-TOKEN"])
+  const api = `${props.protocol}//${props.hostname}`;
 
   const logout = async () => {
     try {
       await axios({
         method: "post",
-        url: `${process.env.NEXT_PUBLIC_BASE_API}/logout`,
+        url: `${api}/logout`,
         withCredentials: true
       }).then((response) => {
         removeCookie("XSRF-TOKEN");
@@ -58,7 +60,7 @@ export default function Subjects(props: NextPage & {XSRF_TOKEN: string}) {
   useEffect(() => {
     if (authenticated) {
       axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_API}/graphql`,
+        `${api}/graphql`,
         {
           query: `
               query {
