@@ -96,6 +96,6 @@ class GraphTest extends TestCase
         ')->decodeResponseJson();
 
         $users = json_decode($response->json)->data->users->data;
-        $this->assertCount(10, $users);
+        $this->assertCount(3, $users);
     }
 }

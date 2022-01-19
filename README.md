@@ -15,16 +15,28 @@ For this challenge, you will require docker and docker-compose available in your
 Fork this repository and clone it into your working environment of choice.
 
 Once available, run the following commands from the root directory:
+
 1. ``` docker-compose up -d --build ```
-2. ``` docker exec laravel php artisan migrate ```
-3. ``` docker exec laravel php artisan db:seed --class=DatabaseSeeder ```
-4. ``` docker exec laravel php artisan db:seed --class=SubjectSeeder ```
+2. ``` docker exec laravel composer update ```
+
+In the laravel directory, duplicate the .env.example file as .env, and generate an application key
+
+3. ``` cp .env.example .env ```
+4. ```  docker exec laravel php artisan key:generate ```
+
+Migrate and seed data (from the root directory)
+
+4. ``` docker exec laravel php artisan migrate ```
+5. ``` docker exec laravel php artisan db:seed --class=DatabaseSeeder ```
+6. ``` docker exec laravel php artisan db:seed --class=SubjectSeeder ```
 
 From the nextjs directory, run:
-&nbsp;&nbsp;&nbsp;5. ``` yarn install ```
+
+7. ``` yarn install ```
 
 Finally, launch the application with:
-&nbsp;&nbsp;&nbsp;6. ``` docker-compose up ```
+
+8. ``` docker-compose up ```
 
 You may now find the nextjs application served at localhost:3000 / host.docker.internal:3000.  You may also access the laravel application at port 80 (though this will just return a Hello World).
 
@@ -57,7 +69,11 @@ Once you have the application stack running, you're ready to take on the challen
 Please complete the following user stories relative to the role you are applying for.  You may optionally complete user stories from other role levels.
 
 **Graduate Software Engineer:**
-1. As an un-authenticated user, I should *not* be able to request a subject list from the API.
+1. As an un-authenticated user, I should *not* be able to request a subject list from the API.  You will note that performing the following un-authenticated request currently returns data that should be protected.
+```curl --location --request POST 'http://host.docker.internal/graphql' \
+--header 'Content-Type: application/json' \
+--data-raw '{"query":"query {\r\n    subjects(page: 1) {\r\n        data {\r\n            id\r\n            name\r\n        }\r\n    }\r\n}","variables":{}}'
+```
 2. As an authenticated user, I want to be able to sort testing subjects by age and testing chamber from within the interface.
 3. As an authenticated user, I want to be able to sort testing subjects by age and testing chamber in my API requests.
 

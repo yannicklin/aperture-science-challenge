@@ -43,7 +43,7 @@ describe('Subjects page, with session cookie', () => {
       const { render } = await getPage({
         route: '/subjects',
     });
-    mock.onPost(`${process.env.NEXT_PUBLIC_BASE_API}/graphql`).reply(mockStatus, mockResponse);
+    mock.onPost(`http://${process.env.NEXT_PUBLIC_BASE_API}/graphql`).reply(mockStatus, mockResponse);
     render();
   }
 

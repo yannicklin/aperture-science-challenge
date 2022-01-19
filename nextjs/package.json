@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watchAll",
+    "test": "NEXT_PUBLIC_BASE_API=localhost jest --watchAll",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
