@@ -15,7 +15,7 @@ RUN yarn build
 # remove dev dependencies
 # RUN npm prune --production
 
-FROM node:alpine
+FROM node:16-alpine
 
 WORKDIR /usr/src/app
 
