@@ -70,6 +70,7 @@
 }
 
 .content input[type="submit"],
+.content input[type="button"],
 .content button {
   padding: 0.35em 0.7em;
   background: rgba(0, 0, 0, 0.5);
@@ -81,9 +82,11 @@
   font-size: 1.1rem;
   display: inline-flex;
   margin-top: 1rem;
+  margin-right: 1rem;
 }
 
 .content input[type="submit"]:hover,
+.content input[type="button"]:hover,
 .content button:hover {
   background: rgba(0, 0, 0, 0.7);
 }

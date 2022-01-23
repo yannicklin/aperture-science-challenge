@@ -10,9 +10,7 @@ type Query {
     user(id: ID @eq): User @find @guard
     subjects(
         orderBy: _
-            @orderBy(
-                columns: ["created_at, ", date_of_birth, ", ", test_chamber, ""]
-            )
+            @orderBy(columns: ["created_at", "date_of_birth", "test_chamber"])
     ): [Subject!]! @paginate
     subject(id: ID @eq): Subject @find
     me: User @auth
@@ -20,6 +18,21 @@ type Query {
 
 type Mutation {
     deleteSubject(id: ID!): Subject @delete
+    createSubject(
+        name: String!
+        date_of_birth: DateTime!
+        test_chamber: Int!
+        score: Int!
+        alive: Boolean!
+    ): Subject @create
+    updateSubject(
+        id: ID!
+        name: String!
+        date_of_birth: DateTime!
+        test_chamber: Int!
+        score: Int!
+        alive: Boolean!
+    ): Subject @update
 }
 
 type User {
