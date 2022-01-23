@@ -14,3 +14,39 @@ a {
 * {
   box-sizing: border-box;
 }
+
+table td.ascending,
+table td.descending {
+  color: red;
+}
+
+table td.ascending::after {
+  content: "\25B2";
+  display: inline-block;
+  margin-left: 0.5em;
+}
+
+table td.descending::after {
+  content: "\25BC";
+  display: inline-block;
+  margin-left: 0.5em;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  width: 33%;
+  align-items: baseline;
+}
+
+.pagination button {
+  padding: 1rem;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.pagination p {
+  padding: 1rem;
+  font-size: 1.5rem;
+  margin: 0;
+}
